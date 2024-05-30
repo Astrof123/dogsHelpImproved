@@ -52,7 +52,8 @@
 ```
 {
     "nickname":"Andrey",
-    "password":"strongpassword1337"
+    "password":"strongpassword1337",
+    "special_code": "Danny"
 }
 ```
 * Ответ
@@ -319,25 +320,6 @@
     "success": "true"
 }
 ```
-5) Биг Админ может назначить/уволить админом пользователя.
-#### Назначить/уволить админом пользователя
-```/user/changeAdmin```
-* Запрос
-```
-{
-    "accessToken": "JusOh2nRK1kZpxzK"
-    "changed_user_login": "DannyCrut"
-    "admin": True
-
-}
-```
-* Ответ
-```
-{
-    "success": "true"
-}
-```
-
 ## Базы данных:
 #### Таблица с пользователями
 ```
