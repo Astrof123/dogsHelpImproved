@@ -52,8 +52,7 @@
 ```
 {
     "nickname":"Andrey",
-    "password":"strongpassword1337",
-    "special_code": "Danny"
+    "password":"strongpassword1337"
 }
 ```
 * Ответ
@@ -258,6 +257,8 @@
     "accessToken": "JusOh2nRK1kZpxzK",
     "characteristic": "Рыжий корги, рост 25 см, вес 10кг, дружелюбный и обаятельный",
     "place": "Irkutsk",
+    "photo": 'dog.img',
+    "name": "Черепокрушитель"
 }
 ```
 * Ответ
@@ -312,6 +313,23 @@
     "accessToken": "JusOh2nRK1kZpxzK",
     "dog_id": 12,
     "delete": true
+}
+```
+* Ответ
+```
+{
+    "success": "true"
+}
+```
+5) Биг Админ может снять/дать админку пользователю.
+#### Снять/дать админтку пользователю
+```/user/changeAdmin```
+* Запрос
+```
+{
+    "accessToken": "JusOh2nRK1kZpxzK",
+    "changed_user_login": "goodVasya",
+    "admin": true
 }
 ```
 * Ответ
