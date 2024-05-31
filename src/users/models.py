@@ -21,6 +21,8 @@ class DogsUser(BaseDBModel):
     place = Column(String, unique=False, index=True)
     is_deleted = Column(Boolean, default=True)
     accessToken = Column(String, unique=False, index=False)
+    photo = Column(String, unique=False, index=False)
+    name = Column(String, unique=False, index=False)
 
 class Tasks(BaseDBModel):
     __tablename__ = "tasks"

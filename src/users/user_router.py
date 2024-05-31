@@ -15,7 +15,6 @@ FORMATTER_STRING = "%(asctime)s — %(name)s — %(levelname)s — %(message)s"
 FORMATTER = logging.Formatter(FORMATTER_STRING)
 LOG_FILE = "tmp/user_router.log"
 
-
 def get_logger(logger_name):
     logger = logging.getLogger(logger_name)
     logger.setLevel(logging.INFO)
@@ -42,7 +41,7 @@ async def register_user(user: schemas.UserCreate, db: DBSession = Depends(get_db
     db_user = crud.create_user(db, user)
     response = schemas.UserResponse(success=True, accessToken=db_user.accessToken)
 
-    logger.info(f"POST /user/register — Пользователь {user.login} зарегистрирован.")
+    logger.info(f"POST /user/register — Пользователь {user.login} зарегистрирован.")    
     return response
 
 @router.post("/user/login", response_model=schemas.UserResponse)

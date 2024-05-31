@@ -14,6 +14,12 @@ def getTokenAdmin():
         "password": "qwerty"
     })
 
+    if (response.status_code == 400):
+        response = client.post("/user/register", json={
+            "login": 'BigAdmin',
+            "password": "qwerty"
+        })
+
     return response.json()["accessToken"]
 
 def doAdmin(login):
@@ -49,7 +55,9 @@ def getDogId():
     response = client.post("/dogs/register", json={
         "accessToken": token,
         "characteristic": "123",
-        "place": "Irkutsk"
+        "place": "Irkutsk",
+        'photo': 'dog.img',
+        'name': 'Черепокрушитель'
     })
     return response.json()["dogid"]
 def getLogin():
@@ -70,7 +78,9 @@ def getPlace():
     response = client.post("/dogs/register", json={
         "accessToken": token,
         "characteristic": "123",
-        "place": place
+        "place": place,
+        'photo': 'dog.img',
+        'name': 'Черепокрушитель'
     })
 
     return place
@@ -80,7 +90,9 @@ def getDogID_AND_accessDogToken():
      response = client.post("/dogs/register", json={
          "accessToken": token,
          "characteristic": "123",
-         "place": "Irkutsk"
+         "place": "Irkutsk",
+         'photo': 'dog.img',
+         'name': 'Черепокрушитель'
      })
      res=[response.json()["dogid"],response.json()["accessDogToken"]]
      return res
@@ -142,7 +154,9 @@ def test_register_dog_correct():
     response = client.post("/dogs/register", json={
             "accessToken": token,
             "characteristic": "Добрый гав-гавыч по имени Черепокрушитель",
-            "place": "Irkutsk"
+            "place": "Irkutsk",
+            'photo': 'dog.img',
+            'name': 'Черепокрушитель'
         })
 
     assert response.status_code == 200
@@ -153,7 +167,9 @@ def test_register_dog_wrongToken():
     response = client.post("/dogs/register", json={
             "accessToken": 'wrong',
             "characteristic": "Добрый гав-гавыч по имени Черепокрушитель",
-            "place": "Irkutsk"
+            "place": "Irkutsk",
+            'photo': 'dog.img',
+            'name': 'Черепокрушитель'
         })
 
     assert response.status_code == 400

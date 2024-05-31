@@ -54,7 +54,6 @@ def get_user_by_Admin(db: Session, accessToken: str) -> bool:
 
 def get_user_by_Deleted(db: Session, login: str) -> bool:
     db_user = db.query(models.tableUser.login, models.tableUser.is_deleted).filter_by(login=login).first()
-    print(db_user)
     return db_user[1]
 def checkPassword(db: Session, login:str,password: str) -> Optional[models.tableUser]:
     db_user = db.query(models.tableUser).filter_by(login=login).first()
@@ -70,7 +69,7 @@ def checkPassword(db: Session, login:str,password: str) -> Optional[models.table
 def create_dogsuser(db: Session, user: schemas.DogsUserBase) -> schemas.DogsUser:
     accessDogToken = token_hex(6)
 
-    db.user = models.DogsUser(characteristic=user.characteristic, coordinates="52.249958,104.264544", last_send=str(datetime.now()), place=user.place, is_deleted=False, accessToken=accessDogToken)
+    db.user = models.DogsUser(characteristic=user.characteristic, coordinates='', last_send=str(datetime.now()), place=user.place, is_deleted=False, accessToken=accessDogToken, name=user.name, photo=user.photo)
 
     db.add(db.user)
     db.commit()

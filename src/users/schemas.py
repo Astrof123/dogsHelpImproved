@@ -20,6 +20,8 @@ class DogsUserBase(BaseModel):
     accessToken: str
     characteristic: str
     place: str
+    photo: str
+    name: str
 
 class DogsUser(BaseModel):
     success: bool
