@@ -1,1 +1,9 @@
-2024-05-30 12:44:06,871 Ч user_router_logger Ч INFO Ч POST /user/register Ч ѕользователь TestingUser зарегистрирован.
+2024-06-01 10:29:28,498 Ч user_router_logger Ч INFO Ч POST /user/register Ч ѕользователь vasya789 зарегистрирован.
+2024-06-01 10:31:03,259 Ч user_router_logger Ч WARNING Ч POST /user/login Ч ѕользователь erbhgeriygeri ввел неверный пароль.
+2024-06-01 10:32:35,341 Ч user_router_logger Ч WARNING Ч POST /user/login Ч ѕользователь vasya789 ввел неверный пароль.
+2024-06-01 10:32:42,077 Ч user_router_logger Ч INFO Ч POST /user/login Ч ѕользователь vasya789 вошел в аккаунт.
+2024-06-01 10:32:46,226 Ч user_router_logger Ч INFO Ч POST /user/login Ч ѕользователь vasya789 вошел в аккаунт.
+2024-06-01 10:32:52,142 Ч user_router_logger Ч INFO Ч POST /user/login Ч ѕользователь vasya789 вошел в аккаунт.
+2024-06-01 10:33:05,693 Ч user_router_logger Ч WARNING Ч POST /user/register Ч ѕользователь vasya789 уже зарегистрирован.
+2024-06-01 11:43:07,300 Ч user_router_logger Ч INFO Ч POST /user/register Ч ѕользователь enter зарегистрирован.
+2024-06-01 11:44:59,523 Ч user_router_logger Ч INFO Ч POST /user/register Ч ѕользователь 12345 зарегистрирован.

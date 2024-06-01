@@ -2,7 +2,7 @@ from fastapi.testclient import TestClient
 import re
 import random
 
-from src.main import app
+from main import app
 
 client = TestClient(app)
 
@@ -47,7 +47,21 @@ def getAccessToken():
 
     doAdmin(rand_login)
     return response.json()["accessToken"]
+def getAccessTokennotAdmin():
+    names = ["kekorik", "krosh", "ejik", "kopatuch"]
+    rand_login = names[random.randint(0, 3)] + str(random.randint(1000, 10000))
+    response = client.post("/user/register", json={
+        "login": rand_login,
+        "password": "qwerty"
+    })
+    while (response.status_code!=200):
+        rand_login = names[random.randint(0, 3)] + str(random.randint(1000, 10000))
+        response = client.post("/user/register", json={
+            "login": rand_login,
+            "password": "qwerty",
+        })
 
+    return response.json()["accessToken"]
 
 def getDogId():
     token = getAccessToken()
@@ -70,7 +84,6 @@ def getLogin():
 
     doAdmin(rand_login)
     return rand_login
-
 def getPlace():
     token = getAccessToken()
     pl=["Иркутск","Шелехов","Ангарск"]
@@ -118,7 +131,6 @@ def getTakeTask():
     })
 
     return [token, taskid]
-
 def getCreateTask():
     token = getAccessToken()
     dogid = getDogId()
@@ -132,6 +144,50 @@ def getCreateTask():
     return [token, response.json()['task_id']]
 
 # Регистрация пользователя
+def test_AdminCorrect():
+    login=getLogin()
+    token = getTokenAdmin()
+    response = client.post("/user/changeAdmin", json={
+        "accessToken": token,
+        "changed_user_login": login,
+        "admin": True
+    })
+    assert response.status_code == 200
+    assert response.json()["success"] == True
+
+def test_AdminError():
+    login = getLogin()
+    token = getAccessTokennotAdmin()
+    response = client.post("/user/changeAdmin", json={
+        "accessToken": token,
+        "changed_user_login": login,
+        "admin": True
+    })
+
+    assert response.status_code == 400
+
+
+def test_AdminUserError():
+    token = getTokenAdmin()
+    response = client.post("/user/changeAdmin", json={
+        "accessToken": token,
+        "changed_user_login": "kjgfsdlkjgfdkjdgf",
+        "admin": True
+    })
+
+    assert response.status_code == 400
+
+def test_AdminUserAdminError():
+    token = getTokenAdmin()
+    login = getLogin()
+
+    response = client.post("/user/changeAdmin", json={
+        "accessToken": 'efwjfiuwehfuiwe',
+        "changed_user_login": login,
+        "admin": True
+    })
+
+    assert response.status_code == 400
 
 def test_register_user_correct():
     names = ["vasya", "glebby", "maxy", "danny"]
@@ -166,6 +222,19 @@ def test_register_dog_wrongToken():
 
     response = client.post("/dogs/register", json={
             "accessToken": 'wrong',
+            "characteristic": "Добрый гав-гавыч по имени Черепокрушитель",
+            "place": "Irkutsk",
+            'photo': 'dog.img',
+            'name': 'Черепокрушитель'
+        })
+
+    assert response.status_code == 400
+
+def test_register_dog_wrongTokenAdmin():
+    token = getAccessTokennotAdmin()
+
+    response = client.post("/dogs/register", json={
+            "accessToken": token,
             "characteristic": "Добрый гав-гавыч по имени Черепокрушитель",
             "place": "Irkutsk",
             'photo': 'dog.img',
@@ -245,6 +314,22 @@ def test_task_take_wrongTaskId():
 
     assert response.status_code == 400
 
+def test_task_take_wrongTaker():
+    token = getAccessToken()
+    taskid = getTaskId()
+
+    response = client.post("/dogs/task/take", json={
+            "accessToken": token,
+            "task_id": taskid
+    })
+
+    response = client.post("/dogs/task/take", json={
+            "accessToken": token,
+            "task_id": taskid
+    })
+
+    assert response.status_code == 400
+
 # Тест приложения отклика
 
 def test_response_give_correct():
@@ -284,6 +369,19 @@ def test_response_give_wrongTaskId():
 
     assert response.status_code == 400
 
+def test_response_give_wrongCreator():
+    token, taskid = getTakeTask()
+    tokenFake = getAccessToken()
+
+    response = client.post("/dogs/task/response/give", json={
+            "accessToken": tokenFake,
+            "task_id": taskid,
+            "comment": "Всё сделал как надо",
+            "photo": "dog.img"
+    })
+
+    assert response.status_code == 400
+
 # Тест просмотров откликов
 
 def test_response_list_correct():
@@ -317,15 +415,25 @@ def test_response_list_wrongTaskId():
 
     assert response.status_code == 400
 
-# Тест подтвердения задания
+def test_response_list_wrongCreator():
+    token, taskid = getCreateTask()
+    tokenFake = getAccessToken()
 
+    response = client.post("/dogs/task/response/list", json={
+            "accessToken": tokenFake,
+            "task_id": taskid,
+    })
+
+    assert response.status_code == 400
+
+# Тест подтвердения задания
 def test_task_confirm_correct():
     token, taskid = getCreateTask()
 
-    response = client.post("/dogs/task/response/list", json={
+    response = client.post("/dogs/task/confirm", json={
             "accessToken": token,
             "task_id": taskid,
-            "done": 'true'
+            "done": True
     })
 
     assert response.status_code == 200
@@ -334,10 +442,10 @@ def test_task_confirm_correct():
 def test_task_confirm_wrongToken():
     token, taskid = getCreateTask()
 
-    response = client.post("/dogs/task/response/list", json={
+    response = client.post("/dogs/task/confirm", json={
             "accessToken": '21312312',
             "task_id": taskid,
-            "done": 'true'
+            "done": True
     })
 
     assert response.status_code == 400
@@ -345,10 +453,22 @@ def test_task_confirm_wrongToken():
 def test_task_confirm_wrongTaskId():
     token, taskid = getCreateTask()
 
-    response = client.post("/dogs/task/response/list", json={
+    response = client.post("/dogs/task/confirm", json={
             "accessToken": token,
-            "task_id": 10000,
-            "done": 'true'
+            "task_id": 1000000000,
+            "done": True
+    })
+
+    assert response.status_code == 400
+
+def test_task_confirm_wrongCreator():
+    token, taskid = getCreateTask()
+    tokenFake = getAccessToken()
+
+    response = client.post("/dogs/task/confirm", json={
+            "accessToken": tokenFake,
+            "task_id": taskid,
+            "done": True
     })
 
     assert response.status_code == 400
@@ -366,6 +486,16 @@ def test_dog_info_correct():
 
     assert response.status_code == 200
     assert response.json()["success"] == True
+def test_dog_info_errorAdmin():
+    token = getAccessTokennotAdmin()
+    dogid = getDogId()
+
+    response = client.post("/dogs/info", json={
+            "accessToken": token,
+            "dog_id": dogid,
+        })
+
+    assert response.status_code == 400
 
 def test_dog_info_wrongToken():
     dogid = getDogId()
@@ -392,11 +522,11 @@ def test_dog_info_wrongDogId():
 
 def test_user_changestatus_correct():
     token = getAccessToken()
-    tokenForDeleted = getLogin()
+    loginForDeleted = getLogin()
 
     response = client.post("/user/changestatus", json={
             "accessToken": token,
-            "changed_user_login": tokenForDeleted,
+            "changed_user_login": loginForDeleted,
             'delete': True
         })
     assert response.status_code == 200
@@ -407,6 +537,16 @@ def test_user_changestatus_wrongToken():
 
     response = client.post("/user/changestatus", json={
             "accessToken": '123123',
+            "changed_user_login": tokenForDeleted,
+            'delete': True
+        })
+    assert response.status_code == 400
+def test_user_changestatus_errorAdmin():
+    token = getAccessTokennotAdmin()
+    tokenForDeleted = getLogin()
+
+    response = client.post("/user/changestatus", json={
+            "accessToken": token,
             "changed_user_login": tokenForDeleted,
             'delete': True
         })
@@ -435,7 +575,16 @@ def test_dog_changestatus_correct():
         })
     assert response.status_code == 200
     assert response.json()["success"] == True
+def test_dog_changestatus_errorAdmin():
+    token = getAccessTokennotAdmin()
+    dogid = getDogId()
 
+    response = client.post("/dogs/changestatus", json={
+            "accessToken": token,
+            "dogid": dogid,
+            'delete': True
+        })
+    assert response.status_code == 400
 def test_dog_changestatus_wrongToken():
     dogid = getDogId()
 
@@ -493,6 +642,7 @@ def test_dogs_correctcharacterictic():
 
     assert response.status_code == 200
     assert response.json()["success"] == True
+
 def test_dogs_errorcharacterictic():
     token = getAccessToken()
     dogid = getDogId()
@@ -513,6 +663,7 @@ def test_dogs_errorcharacterictic1():
     })
 
     assert response.status_code == 400
+
 def test_user_correctlogin():
     login = getLogin()
     response = client.post("/user/login", json={
@@ -521,12 +672,37 @@ def test_user_correctlogin():
     })
     assert response.status_code == 200
     assert response.json()["success"] == True
-def test_user_errorlogin():
+
+def test_user_wrongPassword():
     login = getLogin()
     response = client.post("/user/login", json={
         "login": login,
+        "password": "erveruivhberuvherui"
+    })
+    assert response.status_code == 400
+
+def test_user_errorlogin():
+    login = getLogin()
+    response = client.post("/user/login", json={
+        "login": login
     })
     assert response.status_code == 422
+
+def test_user_errorBanned():
+    login = getLogin()
+    token = getAccessToken()
+
+    response = client.post("/user/changestatus", json={
+            "accessToken": token,
+            "changed_user_login": login,
+            'delete': True
+        })
+
+    response = client.post("/user/login", json={
+        "login": login,
+        "password": "qwerty"
+    })
+    assert response.status_code == 400
 
 def test_user_correctplace():
     token = getAccessToken()
@@ -554,21 +730,20 @@ def test_user_correcttaskList():
     })
     assert response.status_code == 200
     assert response.json()["success"] == True
-def error_user_errortaskList():
-    token = getAccessToken()
+
+def test_error_user_errortaskList():
     dogid = getDogId()
     response = client.post("/dogs/task/list", json={
         "accessToken": '123123',
         "dog_id": dogid
     })
     assert response.status_code == 400
-def error_user_errortaskList1():
+
+def test_error_user_errortaskList1():
     token = getAccessToken()
-    dogid = getDogId()
     response = client.post("/dogs/task/list", json={
         "accessToken": token,
-        "dog_id": '123123'
+        "dog_id": 123123
     })
     assert response.status_code == 400
-
 

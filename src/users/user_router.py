@@ -13,7 +13,7 @@ from logging.handlers import TimedRotatingFileHandler
 
 FORMATTER_STRING = "%(asctime)s — %(name)s — %(levelname)s — %(message)s"
 FORMATTER = logging.Formatter(FORMATTER_STRING)
-LOG_FILE = "tmp/user_router.log"
+LOG_FILE = "./src/tmp/user_router.log"
 
 def get_logger(logger_name):
     logger = logging.getLogger(logger_name)

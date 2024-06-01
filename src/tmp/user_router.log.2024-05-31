@@ -1,0 +1,11 @@
+2024-05-30 12:44:06,871 Ч user_router_logger Ч INFO Ч POST /user/register Ч ѕользователь TestingUser зарегистрирован.
+2024-05-31 19:14:40,274 Ч user_router_logger Ч INFO Ч POST /user/register Ч ѕользователь gleb123 зарегистрирован.
+2024-05-31 19:14:54,218 Ч user_router_logger Ч INFO Ч POST /user/register Ч ѕользователь BigAdmin зарегистрирован.
+2024-05-31 19:15:17,905 Ч user_router_logger Ч INFO Ч POST /user/changeAdmin Ч —татус админа пользовател€ gleb123 успешно изменен.
+2024-05-31 19:18:30,159 Ч user_router_logger Ч INFO Ч POST /user/register Ч ѕользователь gleb зарегистрирован.
+2024-05-31 19:18:45,646 Ч user_router_logger Ч INFO Ч POST /user/register Ч ѕользователь BigAdmin зарегистрирован.
+2024-05-31 19:19:05,533 Ч user_router_logger Ч WARNING Ч POST /user/changeAdmin Ч Ѕиг админ пыталс€ помен€ть статус несуществующего пользовател€.
+2024-05-31 19:20:40,628 Ч user_router_logger Ч INFO Ч POST /user/changeAdmin Ч —татус админа пользовател€ gleb успешно изменен.
+2024-05-31 19:20:55,720 Ч user_router_logger Ч INFO Ч POST /dogs/register Ч —обака 8607e зарегистрирована.
+2024-05-31 19:22:13,594 Ч user_router_logger Ч INFO Ч POST /dogs/register Ч —обака 8607e зарегистрирована.
+2024-05-31 19:22:13,627 Ч user_router_logger Ч INFO Ч POST /dogs/update Ч ќшейник 2 успешно отправила координаты.
