@@ -29,9 +29,9 @@
    
 ```git clone https://github.com/Astrof123/dogsHelpImproved.git```
 
-5) Загружаете все необходимые библиотеки.
+3) Загружаете все необходимые библиотеки.
 ```pip install -r requirements.txt```
-6) Для запуска сервера:
+4) Для запуска сервера:
 ```uvicorn main:app --reload --port 8001 --host 0.0.0.0``` 
 
 ## Клиент-сервер
