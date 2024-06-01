@@ -24,15 +24,49 @@
 
 ## Инструкция по установке
 
-1) Заходите в нужную директорию для установки.
-2) Для загрузки материалов прописываете в консоли:
-   
-```git clone https://github.com/Astrof123/dogsHelpImproved.git```
+### Linux
+1. Создание директории для проекта:
+```bash
+mkdir dogsHelp
+cd dogsHelp
+```
 
-3) Загружаете все необходимые библиотеки.
-```pip install -r requirements.txt```
-4) Для запуска сервера:
-```uvicorn main:app --reload --port 8001 --host 0.0.0.0``` 
+2. Установка необходимых пакетов:
+```bash
+sudo apt-get update
+sudo apt-get install python3.10
+sudo apt install python3-pip
+```
+
+3. Для загрузки материалов прописываете в консоли:
+   
+```bash
+git clone https://github.com/Astrof123/dogsHelpImproved.git
+```
+
+4. Загружаете все необходимые библиотеки:
+```
+pip install -r requirements.txt
+```
+
+5. Для запуска сервера:
+```uvicorn main:app --reload --port 8001 --host 0.0.0.0```
+
+### Windows
+1. Заходите в нужную папку.
+2. Для загрузки материалов прописываете в консоли:
+
+```
+git clone https://github.com/Astrof123/dogsHelpImproved.git
+```
+
+3. Загружаете все необходимые библиотеки:
+```
+pip install -r requirements.txt
+```
+
+4. Для запуска сервера:
+```uvicorn main:app --reload --port 8001 --host 0.0.0.0```
 
 ## Клиент-сервер
 Примерная схема запросов-ответов
